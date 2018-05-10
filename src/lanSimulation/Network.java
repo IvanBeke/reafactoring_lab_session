@@ -19,10 +19,13 @@
  */
 package lanSimulation;
 
-import lanSimulation.internals.*;
-import java.util.Hashtable;
+import java.io.IOException;
+import java.io.Writer;
 import java.util.Enumeration;
-import java.io.*;
+import java.util.Hashtable;
+
+import lanSimulation.internals.Node;
+import lanSimulation.internals.Packet;
 
 /**
  * A <em>Network</em> represents the basic data stucture for simulating a Local
@@ -55,17 +58,17 @@ public class Network {
 	 */
 	public Network(int size) {
 		assert size > 0;
-		initPtr_ = this;
-		firstNode_ = null;
-		workstations_ = new Hashtable(size, 1.0f);
-		assert isInitialized();
-		assert !consistentNetwork();
+		this.initPtr_ = this;
+		this.firstNode_ = null;
+		this.workstations_ = new Hashtable(size, 1.0f);
+		assert this.isInitialized();
+		assert !this.consistentNetwork();
 	}
 
 	/**
 	 * Return a <em>Network</em> that may serve as starting point for various
 	 * experiments. Currently, the network looks as follows.
-	 * 
+	 *
 	 * <pre>
 	 Workstation Filip [Workstation] -> Node -> Workstation Hans [Workstation]
 	 -> Printer Andy [Printer] -> ...
@@ -101,7 +104,7 @@ public class Network {
 	 * Answer whether #receiver is properly initialized.
 	 */
 	public boolean isInitialized() {
-		return (initPtr_ == this);
+		return (this.initPtr_ == this);
 	};
 
 	/**
@@ -114,8 +117,8 @@ public class Network {
 		// return workstations_.containsKey(ws);
 		Node n;
 
-		assert isInitialized();
-		n = (Node) workstations_.get(ws);
+		assert this.isInitialized();
+		n = (Node) this.workstations_.get(ws);
 		if (n == null) {
 			return false;
 		} else {
@@ -133,59 +136,52 @@ public class Network {
 	 * </p>
 	 */
 	public boolean consistentNetwork() {
-		assert isInitialized();
+		assert this.isInitialized();
 		Enumeration iter;
 		Node currentNode;
 		int printersFound = 0, workstationsFound = 0;
-		Hashtable encountered = new Hashtable(workstations_.size() * 2, 1.0f);
+		Hashtable encountered = new Hashtable(this.workstations_.size() * 2, 1.0f);
 
-		if (workstations_.isEmpty()) {
+		if (this.workstations_.isEmpty()) {
 			return false;
 		}
-		;
-		if (firstNode_ == null) {
+		if (this.firstNode_ == null) {
 			return false;
 		}
-		;
 		// verify whether all registered workstations are indeed workstations
-		iter = workstations_.elements();
+		iter = this.workstations_.elements();
 		while (iter.hasMoreElements()) {
 			currentNode = (Node) iter.nextElement();
 			if (currentNode.type_ != Node.WORKSTATION) {
 				return false;
 			}
-			;
 		}
-		;
 		// enumerate the token ring, verifying whether all workstations are registered
 		// also count the number of printers and see whether the ring is circular
-		currentNode = firstNode_;
+		currentNode = this.firstNode_;
 		while (!encountered.containsKey(currentNode.name_)) {
 			encountered.put(currentNode.name_, currentNode);
 			if (currentNode.type_ == Node.WORKSTATION) {
 				workstationsFound++;
 			}
-			;
 			if (currentNode.type_ == Node.PRINTER) {
 				printersFound++;
 			}
-			;
 			currentNode = currentNode.nextNode_;
 		}
-		;
-		if (currentNode != firstNode_) {
+		if (currentNode != this.firstNode_) {
 			return false;
 		}
-		;// not circular
+		// not circular
 		if (printersFound == 0) {
 			return false;
 		}
-		;// does not contain a printer
-		if (workstationsFound != workstations_.size()) {
+		// does not contain a printer
+		if (workstationsFound != this.workstations_.size()) {
 			return false;
 		}
-		; // not all workstations are registered
-			// all verifications succeedeed
+		// not all workstations are registered
+		// all verifications succeedeed
 		return true;
 	}
 
@@ -196,7 +192,7 @@ public class Network {
 	 * <p>
 	 * <strong>Precondition:</strong> consistentNetwork();
 	 * </p>
-	 * 
+	 *
 	 * @param report
 	 *            Stream that will hold a report about what happened when handling
 	 *            the request.
@@ -204,17 +200,16 @@ public class Network {
 	 *         otherwise
 	 */
 	public boolean requestBroadcast(Writer report) {
-		assert consistentNetwork();
+		assert this.consistentNetwork();
 
 		try {
 			report.write("Broadcast Request\n");
 		} catch (IOException exc) {
 			// just ignore
 		}
-		;
 
-		Node currentNode = firstNode_;
-		Packet packet = new Packet("BROADCAST", firstNode_.name_, firstNode_.name_);
+		Node currentNode = this.firstNode_;
+		Packet packet = new Packet("BROADCAST", this.firstNode_.name_, this.firstNode_.name_);
 		do {
 			try {
 				report.write("\tNode '");
@@ -227,7 +222,6 @@ public class Network {
 			} catch (IOException exc) {
 				// just ignore
 			}
-			;
 			currentNode = currentNode.nextNode_;
 		} while (!packet.destination_.equals(currentNode.name_));
 
@@ -236,7 +230,6 @@ public class Network {
 		} catch (IOException exc) {
 			// just ignore
 		}
-		;
 		return true;
 	}
 
@@ -249,7 +242,7 @@ public class Network {
 	 * <strong>Precondition:</strong> consistentNetwork() &
 	 * hasWorkstation(workstation);
 	 * </p>
-	 * 
+	 *
 	 * @param workstation
 	 *            Name of the workstation requesting the service.
 	 * @param document
@@ -264,7 +257,7 @@ public class Network {
 	 */
 	public boolean requestWorkstationPrintsDocument(String workstation, String document, String printer,
 			Writer report) {
-		assert consistentNetwork() & hasWorkstation(workstation);
+		assert this.consistentNetwork() & this.hasWorkstation(workstation);
 
 		try {
 			report.write("'");
@@ -277,13 +270,12 @@ public class Network {
 		} catch (IOException exc) {
 			// just ignore
 		}
-		;
 
 		boolean result = false;
 		Node startNode, currentNode;
 		Packet packet = new Packet(document, workstation, printer);
 
-		startNode = (Node) workstations_.get(workstation);
+		startNode = (Node) this.workstations_.get(workstation);
 
 		try {
 			report.write("\tNode '");
@@ -293,7 +285,6 @@ public class Network {
 		} catch (IOException exc) {
 			// just ignore
 		}
-		;
 		currentNode = startNode.nextNode_;
 		while ((!packet.destination_.equals(currentNode.name_)) & (!packet.origin_.equals(currentNode.name_))) {
 			try {
@@ -304,13 +295,11 @@ public class Network {
 			} catch (IOException exc) {
 				// just ignore
 			}
-			;
 			currentNode = currentNode.nextNode_;
 		}
-		;
 
 		if (packet.destination_.equals(currentNode.name_)) {
-			result = printDocument(currentNode, packet, report);
+			result = this.printDocument(currentNode, packet, report);
 		} else {
 			try {
 				report.write(">>> Destinition not found, print job cancelled.\n\n");
@@ -318,7 +307,6 @@ public class Network {
 			} catch (IOException exc) {
 				// just ignore
 			}
-			;
 			result = false;
 		}
 
@@ -339,20 +327,16 @@ public class Network {
 						if (endPos < 0) {
 							endPos = document.message_.length();
 						}
-						;
 						author = document.message_.substring(startPos + 7, endPos);
 					}
-					;
 					startPos = document.message_.indexOf("title:");
 					if (startPos >= 0) {
 						endPos = document.message_.indexOf(".", startPos + 6);
 						if (endPos < 0) {
 							endPos = document.message_.length();
 						}
-						;
 						title = document.message_.substring(startPos + 6, endPos);
 					}
-					;
 					report.write("\tAccounting -- author = '");
 					report.write(author);
 					report.write("' -- title = '");
@@ -365,7 +349,6 @@ public class Network {
 					if (document.message_.length() >= 16) {
 						author = document.message_.substring(8, 16);
 					}
-					;
 					report.write("\tAccounting -- author = '");
 					report.write(author);
 					report.write("' -- title = '");
@@ -374,11 +357,9 @@ public class Network {
 					report.write(">>> ASCII Print job delivered.\n\n");
 					report.flush();
 				}
-				;
 			} catch (IOException exc) {
 				// just ignore
 			}
-			;
 			return true;
 		} else {
 			try {
@@ -387,7 +368,6 @@ public class Network {
 			} catch (IOException exc) {
 				// just ignore
 			}
-			;
 			return false;
 		}
 	}
@@ -398,10 +378,11 @@ public class Network {
 	 * <strong>Precondition:</strong> isInitialized();
 	 * </p>
 	 */
+	@Override
 	public String toString() {
-		assert isInitialized();
-		StringBuffer buf = new StringBuffer(30 * workstations_.size());
-		printOn(buf);
+		assert this.isInitialized();
+		StringBuffer buf = new StringBuffer(30 * this.workstations_.size());
+		this.printOn(buf);
 		return buf.toString();
 	}
 
@@ -412,8 +393,8 @@ public class Network {
 	 * </p>
 	 */
 	public void printOn(StringBuffer buf) {
-		assert isInitialized();
-		Node currentNode = firstNode_;
+		assert this.isInitialized();
+		Node currentNode = this.firstNode_;
 		do {
 			switch (currentNode.type_) {
 			case Node.NODE:
@@ -439,7 +420,7 @@ public class Network {
 			;
 			buf.append(" -> ");
 			currentNode = currentNode.nextNode_;
-		} while (currentNode != firstNode_);
+		} while (currentNode != this.firstNode_);
 		buf.append(" ... ");
 	}
 
@@ -450,10 +431,10 @@ public class Network {
 	 * </p>
 	 */
 	public void printHTMLOn(StringBuffer buf) {
-		assert isInitialized();
+		assert this.isInitialized();
 
 		buf.append("<HTML>\n<HEAD>\n<TITLE>LAN Simulation</TITLE>\n</HEAD>\n<BODY>\n<H1>LAN SIMULATION</H1>");
-		Node currentNode = firstNode_;
+		Node currentNode = this.firstNode_;
 		buf.append("\n\n<UL>");
 		do {
 			buf.append("\n\t<LI> ");
@@ -475,13 +456,11 @@ public class Network {
 				break;
 			default:
 				buf.append("(Unexpected)");
-				;
 				break;
 			}
-			;
 			buf.append(" </LI>");
 			currentNode = currentNode.nextNode_;
-		} while (currentNode != firstNode_);
+		} while (currentNode != this.firstNode_);
 		buf.append("\n\t<LI>...</LI>\n</UL>\n\n</BODY>\n</HTML>\n");
 	}
 
@@ -492,9 +471,9 @@ public class Network {
 	 * </p>
 	 */
 	public void printXMLOn(StringBuffer buf) {
-		assert isInitialized();
+		assert this.isInitialized();
 
-		Node currentNode = firstNode_;
+		Node currentNode = this.firstNode_;
 		buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<network>");
 		do {
 			buf.append("\n\t");
@@ -521,7 +500,7 @@ public class Network {
 			}
 			;
 			currentNode = currentNode.nextNode_;
-		} while (currentNode != firstNode_);
+		} while (currentNode != this.firstNode_);
 		buf.append("\n</network>");
 	}
 

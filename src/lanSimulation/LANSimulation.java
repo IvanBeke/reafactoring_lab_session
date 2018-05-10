@@ -19,9 +19,9 @@
  */
 package lanSimulation;
 
-import lanSimulation.tests.*;
-import java.lang.AssertionError;
-import java.io.*;
+import java.io.StringWriter;
+
+import lanSimulation.tests.LANTests;
 
 public class LANSimulation {
 

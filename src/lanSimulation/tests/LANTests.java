@@ -19,12 +19,18 @@
  */
 package lanSimulation.tests;
 
-import lanSimulation.internals.*;
-import lanSimulation.*;
-import junit.framework.*;
-import junit.extensions.*;
-import java.lang.AssertionError;
-import java.io.*;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.StringWriter;
+
+import junit.framework.Test;
+import junit.framework.TestCase;
+import junit.framework.TestSuite;
+import lanSimulation.Network;
+import lanSimulation.internals.Node;
+import lanSimulation.internals.Packet;
 
 public class LANTests extends TestCase {
 
@@ -184,11 +190,11 @@ public class LANTests extends TestCase {
 			;
 		}
 
-		assertTrue("equals fName1 to fName2 ", compareFiles(fName1, fName2));
-		assertFalse("not equals fName1 to fName3 (fName 3 is shorter)", compareFiles(fName1, fName3));
-		assertFalse("not equals fName3 to fName1  (fName 3 is shorter)", compareFiles(fName3, fName1));
-		assertFalse("not equals fName1 to fName4 (last character differs)", compareFiles(fName1, fName4));
-		assertFalse("not equals fName1 to fName4 (last character differs)", compareFiles(fName1, fName4));
+		assertTrue("equals fName1 to fName2 ", this.compareFiles(fName1, fName2));
+		assertFalse("not equals fName1 to fName3 (fName 3 is shorter)", this.compareFiles(fName1, fName3));
+		assertFalse("not equals fName3 to fName1  (fName 3 is shorter)", this.compareFiles(fName3, fName1));
+		assertFalse("not equals fName1 to fName4 (last character differs)", this.compareFiles(fName1, fName4));
+		assertFalse("not equals fName1 to fName4 (last character differs)", this.compareFiles(fName1, fName4));
 	}
 
 	public void testBasicNode() {
@@ -291,7 +297,7 @@ public class LANTests extends TestCase {
 			;
 		}
 		;
-		assertTrue("Generated output is not as expected ", compareFiles(generateOutputFName, expectedOutputFName));
+		assertTrue("Generated output is not as expected ", this.compareFiles(generateOutputFName, expectedOutputFName));
 	}
 
 	/*
@@ -304,7 +310,8 @@ public class LANTests extends TestCase {
 		Network network = Network.DefaultExample();
 		StringWriter report = new StringWriter(100);
 		try {
-			network.requestWorkstationPrintsDocument("UnknownWorkstation", "does not matter", "does not matter", report);	
+			network.requestWorkstationPrintsDocument("UnknownWorkstation", "does not matter", "does not matter",
+					report);
 		} catch (AssertionError e) {
 			//
 		}

@@ -41,18 +41,18 @@ public class Packet {
 	 * Construct a <em>Packet</em> with given #message and #destination.
 	 */
 	public Packet(String message, String destination) {
-		message_ = message;
-		origin_ = "";
-		destination_ = destination;
+		this.message_ = message;
+		this.origin_ = "";
+		this.destination_ = destination;
 	}
 
 	/**
 	 * Construct a <em>Packet</em> with given #message, #origin and #receiver.
 	 */
 	public Packet(String message, String origin, String destination) {
-		message_ = message;
-		origin_ = origin;
-		destination_ = destination;
+		this.message_ = message;
+		this.origin_ = origin;
+		this.destination_ = destination;
 	}
 
 }

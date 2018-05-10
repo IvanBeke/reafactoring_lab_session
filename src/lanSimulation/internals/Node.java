@@ -48,7 +48,7 @@ public class Node {
 	public String name_;
 	/**
 	 * Holds the next Node in the token ring architecture.
-	 * 
+	 *
 	 * @see lanSimulation.internals.Node
 	 */
 	public Node nextNode_;
@@ -61,9 +61,9 @@ public class Node {
 	 */
 	public Node(byte type, String name) {
 		assert (type >= NODE) & (type <= PRINTER);
-		type_ = type;
-		name_ = name;
-		nextNode_ = null;
+		this.type_ = type;
+		this.name_ = name;
+		this.nextNode_ = null;
 	}
 
 	/**
@@ -75,9 +75,9 @@ public class Node {
 	 */
 	public Node(byte type, String name, Node nextNode) {
 		assert (type >= NODE) & (type <= PRINTER);
-		type_ = type;
-		name_ = name;
-		nextNode_ = nextNode;
+		this.type_ = type;
+		this.name_ = name;
+		this.nextNode_ = nextNode;
 	}
 
 }
