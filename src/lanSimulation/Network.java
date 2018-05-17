@@ -211,17 +211,7 @@ public class Network {
 		Node currentNode = this.firstNode_;
 		Packet packet = new Packet("BROADCAST", this.firstNode_.name_, this.firstNode_.name_);
 		do {
-			try {
-				report.write("\tNode '");
-				report.write(currentNode.name_);
-				report.write("' accepts broadcase packet.\n");
-				report.write("\tNode '");
-				report.write(currentNode.name_);
-				report.write("' passes packet on.\n");
-				report.flush();
-			} catch (IOException exc) {
-				// just ignore
-			}
+			logging(report, currentNode, true);
 			currentNode = currentNode.nextNode_;
 		} while (!packet.destination_.equals(currentNode.name_));
 
@@ -231,6 +221,22 @@ public class Network {
 			// just ignore
 		}
 		return true;
+	}
+
+	private void logging(Writer report, Node node, boolean accept) {
+		try {
+			if(accept) {
+				report.write("\tNode '");
+				report.write(node.name_);
+				report.write("' accepts broadcase packet.\n");
+			}
+			report.write("\tNode '");
+			report.write(node.name_);
+			report.write("' passes packet on.\n");
+			report.flush();
+		} catch (IOException exc) {
+			// just ignore
+		}
 	}
 
 	/**
@@ -277,24 +283,10 @@ public class Network {
 
 		startNode = (Node) this.workstations_.get(workstation);
 
-		try {
-			report.write("\tNode '");
-			report.write(startNode.name_);
-			report.write("' passes packet on.\n");
-			report.flush();
-		} catch (IOException exc) {
-			// just ignore
-		}
+		logging(report, startNode, false);
 		currentNode = startNode.nextNode_;
 		while ((!packet.destination_.equals(currentNode.name_)) & (!packet.origin_.equals(currentNode.name_))) {
-			try {
-				report.write("\tNode '");
-				report.write(currentNode.name_);
-				report.write("' passes packet on.\n");
-				report.flush();
-			} catch (IOException exc) {
-				// just ignore
-			}
+			logging(report, currentNode, false);
 			currentNode = currentNode.nextNode_;
 		}
 
