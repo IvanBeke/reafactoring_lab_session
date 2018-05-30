@@ -289,14 +289,6 @@ public class Network {
 		return result;
 	}
 
-	public void accounting(Writer report, String author, String title) throws IOException {
-		report.write("\tAccounting -- author = '");
-		report.write(author);
-		report.write("' -- title = '");
-		report.write(title);
-		report.write("'\n");
-	}
-
 	/**
 	 * Return a printable representation of #receiver.
 	 * <p>

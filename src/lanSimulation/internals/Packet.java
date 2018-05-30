@@ -84,7 +84,7 @@ public class Packet {
 						}
 						title = message_.substring(startPos + 6, endPos);
 					}
-					network.accounting(report, author, title);
+					accounting(report, author, title);
 					report.write(">>> Postscript job delivered.\n\n");
 					report.flush();
 				} else {
@@ -92,7 +92,7 @@ public class Packet {
 					if (message_.length() >= 16) {
 						author = message_.substring(8, 16);
 					}
-					network.accounting(report, author, title);
+					accounting(report, author, title);
 					report.write(">>> ASCII Print job delivered.\n\n");
 					report.flush();
 				}
@@ -109,6 +109,14 @@ public class Packet {
 			}
 			return false;
 		}
+	}
+
+	private void accounting(Writer report, String author, String title) throws IOException {
+		report.write("\tAccounting -- author = '");
+		report.write(author);
+		report.write("' -- title = '");
+		report.write(title);
+		report.write("'\n");
 	}
 
 }
