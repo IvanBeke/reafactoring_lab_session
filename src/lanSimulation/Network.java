@@ -208,13 +208,10 @@ public class Network {
 			// just ignore
 		}
 
-		Node currentNode = this.firstNode_;
 		Packet packet = new Packet("BROADCAST", this.firstNode_.name_, this.firstNode_.name_);
 		boolean accept = true;
-		do {
-			currentNode.logging(report, accept);
-			currentNode = currentNode.nextNode();
-		} while (!packet.atDestination(currentNode));
+		Node currentNode = logAndNext(report, this.firstNode_, accept);
+		currentNode = send(report, accept, currentNode, packet);
 
 		try {
 			report.write(">>> Broadcast travelled whole token ring.\n\n");
@@ -222,6 +219,12 @@ public class Network {
 			// just ignore
 		}
 		return true;
+	}
+
+	private Node logAndNext(Writer report, Node currentNode, boolean accept) {
+		currentNode.logging(report, accept);
+		currentNode = currentNode.nextNode();
+		return currentNode;
 	}
 
 	/**
@@ -271,10 +274,7 @@ public class Network {
 
 		startNode.logging(report, accept);
 		currentNode = startNode.nextNode_;
-		while ((!packet.atDestination(currentNode)) & (!packet.origin_.equals(currentNode.name_))) {
-			currentNode.logging(report, accept);
-			currentNode = currentNode.nextNode();
-		}
+		currentNode = send(report, accept, currentNode, packet);
 
 		if (packet.atDestination(currentNode)) {
 			result = packet.printDocument(currentNode, this, report);
@@ -289,6 +289,13 @@ public class Network {
 		}
 
 		return result;
+	}
+
+	private Node send(Writer report, boolean accept, Node currentNode, Packet packet) {
+		while ((!packet.atDestination(currentNode)) & (!packet.origin_.equals(currentNode.name_))) {
+			currentNode = logAndNext(report, currentNode, accept);
+		}
+		return currentNode;
 	}
 
 	/**
