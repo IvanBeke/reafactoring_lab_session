@@ -312,8 +312,9 @@ public class LANTests extends TestCase {
 		try {
 			network.requestWorkstationPrintsDocument("UnknownWorkstation", "does not matter", "does not matter",
 					report);
+			fail("Tenía que fallar, excepción no lanzada");
 		} catch (AssertionError e) {
-			//
+			// Bien, excepción capturada
 		}
 	}
 
