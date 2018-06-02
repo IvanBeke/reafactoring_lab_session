@@ -168,4 +168,9 @@ public class Node {
 		}
 	}
 
+	public Node nextNode() {
+		return nextNode_;
+	
+	}
+
 }

@@ -167,7 +167,7 @@ public class Network {
 			if (currentNode.type_ == Node.PRINTER) {
 				printersFound++;
 			}
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		}
 		if (currentNode != this.firstNode_) {
 			return false;
@@ -213,7 +213,7 @@ public class Network {
 		boolean accept = true;
 		do {
 			currentNode.logging(report, accept);
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		} while (!packet.atDestination(currentNode));
 
 		try {
@@ -273,7 +273,7 @@ public class Network {
 		currentNode = startNode.nextNode_;
 		while ((!packet.atDestination(currentNode)) & (!packet.origin_.equals(currentNode.name_))) {
 			currentNode.logging(report, accept);
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		}
 
 		if (packet.atDestination(currentNode)) {
@@ -318,7 +318,7 @@ public class Network {
 			currentNode.printOnSwitch(buf);
 			;
 			buf.append(" -> ");
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		} while (currentNode != this.firstNode_);
 		buf.append(" ... ");
 	}
@@ -339,7 +339,7 @@ public class Network {
 			buf.append("\n\t<LI> ");
 			currentNode.printHTMLOnSwitch(buf);
 			buf.append(" </LI>");
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		} while (currentNode != this.firstNode_);
 		buf.append("\n\t<LI>...</LI>\n</UL>\n\n</BODY>\n</HTML>\n");
 	}
@@ -359,7 +359,7 @@ public class Network {
 			buf.append("\n\t");
 			currentNode.printXMLOnSwitch(buf);
 			;
-			currentNode = currentNode.nextNode_;
+			currentNode = currentNode.nextNode();
 		} while (currentNode != this.firstNode_);
 		buf.append("\n</network>");
 	}
