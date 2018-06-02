@@ -210,8 +210,9 @@ public class Network {
 
 		Node currentNode = this.firstNode_;
 		Packet packet = new Packet("BROADCAST", this.firstNode_.name_, this.firstNode_.name_);
+		boolean accept = true;
 		do {
-			currentNode.logging(report, true);
+			currentNode.logging(report, accept);
 			currentNode = currentNode.nextNode_;
 		} while (!packet.atDestination(currentNode));
 
@@ -261,16 +262,17 @@ public class Network {
 			// just ignore
 		}
 
+		boolean accept = false;
 		boolean result = false;
 		Node startNode, currentNode;
 		Packet packet = new Packet(document, workstation, printer);
 
 		startNode = (Node) this.workstations_.get(workstation);
 
-		startNode.logging(report, false);
+		startNode.logging(report, accept);
 		currentNode = startNode.nextNode_;
 		while ((!packet.atDestination(currentNode)) & (!packet.origin_.equals(currentNode.name_))) {
-			currentNode.logging(report, false);
+			currentNode.logging(report, accept);
 			currentNode = currentNode.nextNode_;
 		}
 
