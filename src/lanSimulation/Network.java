@@ -322,7 +322,7 @@ public class Network {
 		assert this.isInitialized();
 		Node currentNode = this.firstNode_;
 		do {
-			currentNode.printOnSwitch(buf);
+			currentNode.printOn(buf);
 			;
 			buf.append(" -> ");
 			currentNode = currentNode.nextNode();
@@ -344,7 +344,7 @@ public class Network {
 		buf.append("\n\n<UL>");
 		do {
 			buf.append("\n\t<LI> ");
-			currentNode.printHTMLOnSwitch(buf);
+			currentNode.printHTMLOn(buf);
 			buf.append(" </LI>");
 			currentNode = currentNode.nextNode();
 		} while (currentNode != this.firstNode_);
@@ -364,7 +364,7 @@ public class Network {
 		buf.append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n\n<network>");
 		do {
 			buf.append("\n\t");
-			currentNode.printXMLOnSwitch(buf);
+			currentNode.printXMLOn(buf);
 			;
 			currentNode = currentNode.nextNode();
 		} while (currentNode != this.firstNode_);

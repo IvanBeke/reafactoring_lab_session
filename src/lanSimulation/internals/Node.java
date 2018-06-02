@@ -99,7 +99,7 @@ public class Node {
 		}
 	}
 
-	public void printOnSwitch(StringBuffer buf) {
+	public void printOn(StringBuffer buf) {
 		switch (type_) {
 		case Node.NODE:
 			buf.append("Node ");
@@ -122,7 +122,7 @@ public class Node {
 		}
 	}
 
-	public void printHTMLOnSwitch(StringBuffer buf) {
+	public void printHTMLOn(StringBuffer buf) {
 		switch (type_) {
 		case Node.NODE:
 			buf.append("Node ");
@@ -145,7 +145,7 @@ public class Node {
 		}
 	}
 
-	public void printXMLOnSwitch(StringBuffer buf) {
+	public void printXMLOn(StringBuffer buf) {
 		switch (type_) {
 		case Node.NODE:
 			buf.append("<node>");
