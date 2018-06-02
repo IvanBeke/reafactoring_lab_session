@@ -119,4 +119,8 @@ public class Packet {
 		report.write("'\n");
 	}
 
+	public boolean atDestination(Node node) {
+		return destination_.equals(node.name_);
+	}
+
 }
