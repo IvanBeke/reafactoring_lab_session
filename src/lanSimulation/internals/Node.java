@@ -62,7 +62,7 @@ public class Node {
 	 * <strong>Precondition:</strong> (type >= NODE) & (type <= PRINTER);
 	 * </p>
 	 */
-	public Node(byte type, String name) {
+	protected Node(byte type, String name) {
 		assert (type >= NODE) & (type <= PRINTER);
 		this.type_ = type;
 		this.name_ = name;
@@ -83,9 +83,13 @@ public class Node {
 		this.nextNode_ = nextNode;
 	}
 
+	public Node(String name) {
+		this(NODE, name);
+	}
+
 	public void logging(Writer report, boolean accept) {
 		try {
-			if(accept) {
+			if (accept) {
 				report.write("\tNode '");
 				report.write(name_);
 				report.write("' accepts broadcase packet.\n");
@@ -170,7 +174,7 @@ public class Node {
 
 	public Node nextNode() {
 		return nextNode_;
-	
+
 	}
 
 }
