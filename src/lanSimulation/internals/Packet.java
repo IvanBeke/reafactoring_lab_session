@@ -22,8 +22,6 @@ package lanSimulation.internals;
 import java.io.IOException;
 import java.io.Writer;
 
-import lanSimulation.Network;
-
 /**
  * A <em>Packet</em> represents a unit of information to be sent over the Local
  * Area Network (LAN).
@@ -60,7 +58,7 @@ public class Packet {
 		this.destination_ = destination;
 	}
 
-	public boolean printDocument(Node printer, Network network, Writer report) {
+	public boolean printDocument(Node printer, Writer report) {
 		String author = "Unknown";
 		String title = "Untitled";
 		int startPos = 0, endPos = 0;

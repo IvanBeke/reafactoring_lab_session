@@ -279,7 +279,7 @@ public class Network {
 		currentNode = send(report, accept, currentNode, packet);
 
 		if (packet.atDestination(currentNode)) {
-			result = packet.printDocument(currentNode, this, report);
+			result = packet.printDocument(currentNode, report);
 		} else {
 			try {
 				report.write(">>> Destinition not found, print job cancelled.\n\n");
