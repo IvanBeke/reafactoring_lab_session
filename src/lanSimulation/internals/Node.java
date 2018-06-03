@@ -62,9 +62,7 @@ public class Node {
 	 * <strong>Precondition:</strong> (type >= NODE) & (type <= PRINTER);
 	 * </p>
 	 */
-	protected Node(byte type, String name) {
-		assert (type >= NODE) & (type <= PRINTER);
-		this.type_ = type;
+	public Node(String name) {
 		this.name_ = name;
 		this.nextNode_ = null;
 	}
@@ -76,16 +74,11 @@ public class Node {
 	 * <strong>Precondition:</strong> (type >= NODE) & (type <= PRINTER);
 	 * </p>
 	 */
-	public Node(byte type, String name, Node nextNode) {
-		assert (type >= NODE) & (type <= PRINTER);
-		this.type_ = type;
+	public Node(String name, Node nextNode) {
 		this.name_ = name;
 		this.nextNode_ = nextNode;
 	}
 
-	public Node(String name) {
-		this(NODE, name);
-	}
 
 	public void logging(Writer report, boolean accept) {
 		try {

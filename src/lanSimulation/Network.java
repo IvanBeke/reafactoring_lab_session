@@ -124,7 +124,7 @@ public class Network {
 		if (n == null) {
 			return false;
 		} else {
-			return n.type_ == Node.WORKSTATION;
+			return n.getClass().equals(WorkStation.class);
 		}
 	};
 
@@ -154,7 +154,7 @@ public class Network {
 		iter = this.workstations_.elements();
 		while (iter.hasMoreElements()) {
 			currentNode = (Node) iter.nextElement();
-			if (currentNode.type_ != Node.WORKSTATION) {
+			if (!currentNode.getClass().equals(WorkStation.class)) {
 				return false;
 			}
 		}
@@ -163,10 +163,10 @@ public class Network {
 		currentNode = this.firstNode_;
 		while (!encountered.containsKey(currentNode.name_)) {
 			encountered.put(currentNode.name_, currentNode);
-			if (currentNode.type_ == Node.WORKSTATION) {
+			if (currentNode.getClass().equals(WorkStation.class)) {
 				workstationsFound++;
 			}
-			if (currentNode.type_ == Node.PRINTER) {
+			if (currentNode.getClass().equals(Printer.class)) {
 				printersFound++;
 			}
 			currentNode = currentNode.nextNode();
